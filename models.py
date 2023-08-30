@@ -1,5 +1,7 @@
-from sqlalchemy import Boolean,Column,ForeignKey,Integer,String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+
 from database import Base
+
 
 class Questions(Base):
     __tablename__ = 'questions'
@@ -13,4 +15,12 @@ class Choices(Base):
     id = Column(Integer, primary_key=True, index=True)
     choices_text = Column(String, index=True)
     is_correct = Column(Boolean,default=False)
-    question_id = Column(Integer, ForeignKey("question_id"))
+    question_id = Column(Integer, ForeignKey("questions.id"))
+
+class Slider(Base):
+    __tablename__='slider'
+
+    id = Column(Integer, primary_key=True,index=True)
+    image_name = Column(String, index=True)
+    image_url = Column(String, index=True)
+    shop_url = Column(String, index=True)
