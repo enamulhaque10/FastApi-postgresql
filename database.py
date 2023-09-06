@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-URL_DATABASE = 'postgresql://postgres:postgres123!@localhost:5432/ecommerceYT'
+URL_DATABASE = 'postgresql://postgres:postgres123@localhost:5432/postgres'
 
 engine = create_engine(URL_DATABASE)
 

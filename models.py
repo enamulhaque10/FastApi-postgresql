@@ -24,3 +24,11 @@ class Slider(Base):
     image_name = Column(String, index=True)
     image_url = Column(String, index=True)
     shop_url = Column(String, index=True)
+
+class AddSlider(Base):
+    __tablename__='addslider'
+
+    id = Column(Integer, primary_key=True,index=True)
+    image_name = Column(String, index=True)
+    image_url = Column(String, index=True)
+    shop_url = Column(String, index=True)

@@ -23,6 +23,11 @@ class imagesliderBase(BaseModel):
     image_url:str
     shop_url:str
 
+class addsliderBase(BaseModel):
+    image_name:str
+    image_url:str
+    shop_url:str
+
 def get_db():
     db = SessionLocal()
     try:
@@ -67,3 +72,27 @@ async def read_slider(db:db_dependency):
     if not result:
         raise HTTPException(status_code=404, detail="Slider is not found")
     return result
+
+# Add Slider
+@app.post("/add/slider/")
+async def create_slider (slider:addsliderBase,db:db_dependency):
+    db_slider = models.AddSlider(image_name=slider.image_name, image_url=slider.image_url, shop_url=slider.shop_url)
+    db.add(db_slider)
+    db.commit()
+    db.refresh(db_slider)
+
+@app.get("/add/slider/list/")
+async def read_slider(db:db_dependency):
+    result = db.query(models.AddSlider).all()
+    data = {}
+    if not result:
+        raise HTTPException(status_code=404, detail="Slider is not found")
+    data = {
+        'listData':result
+    }
+    return data
+
+
+
+
+
