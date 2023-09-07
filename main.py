@@ -8,6 +8,10 @@ import models
 from database import SessionLocal, engine
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*']
+)
 models.Base.metadata.create_all(bind=engine)
 
 class ChoiceBase(BaseModel):
