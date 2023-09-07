@@ -3,6 +3,7 @@ from typing import Annotated, List
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from fastapi.middleware.cors import CORSMiddleware
 
 import models
 from database import SessionLocal, engine
