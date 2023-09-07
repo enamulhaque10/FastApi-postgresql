@@ -84,13 +84,10 @@ async def create_slider (slider:addsliderBase,db:db_dependency):
 @app.get("/add/slider/list/")
 async def read_slider(db:db_dependency):
     result = db.query(models.AddSlider).all()
-    data = {}
     if not result:
         raise HTTPException(status_code=404, detail="Slider is not found")
-    data = {
-        'listData':result
-    }
-    return data
+   
+    return result
 
 
 
