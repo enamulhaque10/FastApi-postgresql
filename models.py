@@ -1,6 +1,8 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+
+from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
 
 from database import Base
+from enums import ProductTags
 
 
 class Questions(Base):
@@ -32,3 +34,16 @@ class AddSlider(Base):
     image_name = Column(String, index=True)
     image_url = Column(String, index=True)
     shop_url = Column(String, index=True)
+
+class Product(Base):
+    __tablename__='product'
+
+    id = Column(Integer, primary_key=True,index=True)
+    product_name = Column(String, index=True)
+    image_href = Column(String, index=True)
+    product_price = Column(String,index=True)
+    product_description = Column(String,index=True)
+    product_options = Column(String,index=True)
+    image_url = Column(String, index=True)
+    imageAlt = Column(String, index=True)
+    tags = Column(Enum(ProductTags), default=ProductTags.NEW)

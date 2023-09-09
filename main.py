@@ -1,12 +1,13 @@
 from typing import Annotated, List
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from fastapi.middleware.cors import CORSMiddleware
 
 import models
 from database import SessionLocal, engine
+from enums import ProductTags
 
 app = FastAPI()
 app.add_middleware(
@@ -32,6 +33,16 @@ class addsliderBase(BaseModel):
     image_name:str
     image_url:str
     shop_url:str
+
+class productBase(BaseModel):
+    product_name :str
+    image_href  :str
+    product_price :str
+    product_description :str
+    product_options :str
+    image_url :str
+    imageAlt :str
+    tags :ProductTags
 
 def get_db():
     db = SessionLocal()
@@ -93,6 +104,39 @@ async def read_slider(db:db_dependency):
         raise HTTPException(status_code=404, detail="Slider is not found")
    
     return result
+
+@app.post("/product/")
+async def create_product(product:productBase, db:db_dependency):
+    db_product = models.Product(
+    product_name = product.product_name,
+    image_href = product.image_href,
+    product_price = product.product_price,
+    product_description = product.product_description,
+    product_options = product.product_options,
+    image_url = product.image_url,
+    imageAlt = product.imageAlt,
+    tags = product.tags
+    )
+
+    db.add(db_product)
+    db.commit()
+    db.refresh(db_product)
+
+@app.get("/product/list/")
+async def product_list(db:db_dependency):
+    result = db.query(models.Product).all()
+    if not result:
+        raise HTTPException(status_code=404, detail="Product is not found")
+   
+    return result
+
+# @app.get("/product/list/{tags}")
+# async def product_(tags:str,db:db_dependency):
+#     result = db.query(models.Product).filter(models.Product.tags.in_(tags))
+#     if not result:
+#         raise HTTPException(status_code=404, detail="Product is not found")
+   
+#     return result
 
 
 
