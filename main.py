@@ -4,6 +4,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 
 import models
 from database import SessionLocal, engine
@@ -132,7 +133,27 @@ async def product_list(db:db_dependency):
 
 # @app.get("/product/list/{tags}")
 # async def product_(tags:str,db:db_dependency):
-#     result = db.query(models.Product).filter(models.Product.tags.in_(tags))
+#     #result = db.query(models.Product).filter(models.Product.tags.in_(tags))
+#     queryData = db.execute(text("SELECT * FROM Product as p where p.tags==:tags"), tags=tags)
+#     raw_data = queryData.fetchall()
+#     result = []
+
+#     for item in raw_data:
+#         object_data = {
+#         'product_name' : item[1],
+#         'image_href' : item[2],
+#         'product_price' : item[3],
+#         'product_description' : item[4],
+#         'product_options' : item[5],
+#         'image_url' : item[6],
+#         'imageAlt' : item[7],
+#         'tags' : item[8],
+#         }
+#         result.append(object_data)
+        
+
+#     print(result, 'item')
+    
 #     if not result:
 #         raise HTTPException(status_code=404, detail="Product is not found")
    
