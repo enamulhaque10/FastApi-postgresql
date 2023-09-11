@@ -4,7 +4,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import text
+from sqlalchemy.sql import text, bindparam
 
 import models
 from database import SessionLocal, engine
@@ -131,33 +131,30 @@ async def product_list(db:db_dependency):
    
     return result
 
-# @app.get("/product/list/{tags}")
-# async def product_(tags:str,db:db_dependency):
-#     #result = db.query(models.Product).filter(models.Product.tags.in_(tags))
-#     queryData = db.execute(text("SELECT * FROM Product as p where p.tags==:tags"), tags=tags)
-#     raw_data = queryData.fetchall()
-#     result = []
+@app.get("/product/list/{tags}")
+async def product_(tags:str,db:db_dependency):
+    print(tags, 'tags')
+    queryData = db.execute(text("SELECT * FROM Product as p where p.tags=:tags").bindparams(bindparam("tags", tags)))
+    raw_data = queryData.fetchall()
+    result = []
 
-#     for item in raw_data:
-#         object_data = {
-#         'product_name' : item[1],
-#         'image_href' : item[2],
-#         'product_price' : item[3],
-#         'product_description' : item[4],
-#         'product_options' : item[5],
-#         'image_url' : item[6],
-#         'imageAlt' : item[7],
-#         'tags' : item[8],
-#         }
-#         result.append(object_data)
-        
-
-#     print(result, 'item')
+    for item in raw_data:
+        object_data = {
+        'product_name' : item[1],
+        'image_href' : item[2],
+        'product_price' : item[3],
+        'product_description' : item[4],
+        'product_options' : item[5],
+        'image_url' : item[6],
+        'imageAlt' : item[7],
+        'tags' : item[8],
+        }
+        result.append(object_data)
     
-#     if not result:
-#         raise HTTPException(status_code=404, detail="Product is not found")
+    if not result:
+        raise HTTPException(status_code=404, detail="Product is not found")
    
-#     return result
+    return result
 
 
 
