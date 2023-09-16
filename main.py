@@ -4,11 +4,11 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import text, bindparam
+from sqlalchemy.sql import bindparam, text
 
 import models
 from database import SessionLocal, engine
-from enums import ProductTags
+from enums import ActiveStatus, ProductTags
 
 app = FastAPI()
 app.add_middleware(
@@ -44,6 +44,11 @@ class productBase(BaseModel):
     image_url :str
     imageAlt :str
     tags :ProductTags
+
+class footerBase(BaseModel):
+    name :str
+    footer_body  :str
+    active_status :ActiveStatus
 
 def get_db():
     db = SessionLocal()
@@ -106,6 +111,8 @@ async def read_slider(db:db_dependency):
    
     return result
 
+#PRODUCT
+
 @app.post("/product/")
 async def create_product(product:productBase, db:db_dependency):
     db_product = models.Product(
@@ -133,7 +140,6 @@ async def product_list(db:db_dependency):
 
 @app.get("/product/list/{tags}")
 async def product_(tags:str,db:db_dependency):
-    print(tags, 'tags')
     queryData = db.execute(text("SELECT * FROM Product as p where p.tags=:tags").bindparams(bindparam("tags", tags)))
     raw_data = queryData.fetchall()
     result = []
@@ -153,6 +159,40 @@ async def product_(tags:str,db:db_dependency):
     
     if not result:
         raise HTTPException(status_code=404, detail="Product is not found")
+   
+    return result
+
+#FOOTER
+
+@app.post("/footer/save/")
+async def create_footer(footer:footerBase, db:db_dependency):
+    request_name = footer.name
+    footer_category = db.execute(text("SELECT * FROM FooterCategory as f where f.name=:request_name").bindparams(bindparam("request_name", request_name)))
+    footer_category = footer_category.fetchone()
+    if footer_category is None:
+        db_footer = models.FooterCategory(
+        name = footer.name,
+        footer_body = footer.footer_body,
+        active_status = footer.active_status
+        )
+
+        db.add(db_footer)
+        db.commit()
+        db.refresh(db_footer)
+        
+        
+        
+    else:
+        raise HTTPException(status_code=400, detail="Same Footer Name Already Exist")
+        
+        
+       
+
+@app.get("/footer/list/")
+async def footer_list(db:db_dependency):
+    result = db.query(models.FooterCategory).all()
+    if not result:
+        raise HTTPException(status_code=404, detail="Active Footer is not found")
    
     return result
 

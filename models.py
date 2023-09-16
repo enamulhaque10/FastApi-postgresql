@@ -2,7 +2,7 @@
 from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
 
 from database import Base
-from enums import ProductTags
+from enums import ActiveStatus, ProductTags
 
 
 class Questions(Base):
@@ -47,3 +47,11 @@ class Product(Base):
     image_url = Column(String, index=True)
     imageAlt = Column(String, index=True)
     tags = Column(Enum(ProductTags), default=ProductTags.NEW)
+
+class FooterCategory(Base):
+    __tablename__ = 'footercategory'
+
+    id = Column(Integer, primary_key=True,index=True)
+    name = Column(String, index=True)
+    footer_body = Column(String, index=True)
+    active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
