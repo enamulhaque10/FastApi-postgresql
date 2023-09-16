@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated, List
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -49,6 +50,13 @@ class footerBase(BaseModel):
     name :str
     footer_body  :str
     active_status :ActiveStatus
+
+class discountBase(BaseModel):
+    name :str
+    discount_code  :str
+    active_status :ActiveStatus
+    start_date : datetime
+    end_date : datetime
 
 def get_db():
     db = SessionLocal()
@@ -186,8 +194,6 @@ async def create_footer(footer:footerBase, db:db_dependency):
         raise HTTPException(status_code=400, detail="Same Footer Name Already Exist")
         
         
-       
-
 @app.get("/footer/list/")
 async def footer_list(db:db_dependency):
     result = db.query(models.FooterCategory).all()
@@ -195,6 +201,30 @@ async def footer_list(db:db_dependency):
         raise HTTPException(status_code=404, detail="Active Footer is not found")
    
     return result
+
+#DISCOUNT CODE
+
+@app.post("/discountcode/save/")
+async def discountcode_add(discount:discountBase,  db:db_dependency):
+    db_discount = models.DiscountCode(
+        name = discount.name,
+        discount_code = discount.discount_code,
+        active_status = discount.active_status,
+        start_date = discount.start_date,
+        end_date = discount.end_date
+        )
+    db.add(db_discount)
+    db.commit()
+    db.refresh(db_discount)
+
+@app.get("/discount/list/")
+async def discount_list(db:db_dependency):
+    result = db.query(models.DiscountCode).all()
+    if not result:
+        raise HTTPException(status_code=404, detail="Active Discount is not found")
+   
+    return result
+
 
 
 

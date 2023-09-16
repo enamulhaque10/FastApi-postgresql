@@ -1,5 +1,8 @@
 
-from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
+from datetime import datetime
+
+from sqlalchemy import (Boolean, Column, DateTime, Enum, ForeignKey, Integer,
+                        String)
 
 from database import Base
 from enums import ActiveStatus, ProductTags
@@ -55,3 +58,13 @@ class FooterCategory(Base):
     name = Column(String, index=True)
     footer_body = Column(String, index=True)
     active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
+
+class DiscountCode(Base):
+    __tablename__ = 'discountcode'
+
+    id = Column(Integer, primary_key=True,index=True)
+    name = Column(String, index=True)
+    discount_code = Column(String, index=True)
+    active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
+    start_date =  Column(DateTime, default=datetime.now)
+    end_date =  Column(DateTime, default=datetime.now)
