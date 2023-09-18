@@ -60,6 +60,28 @@ class discountBase(BaseModel):
     start_date : datetime
     end_date : datetime
 
+class productcategoryBase(BaseModel):
+    category_name :str
+    created_at  :datetime
+    active_status :ActiveStatus
+
+class productBrandBase(BaseModel):
+    brand_name :str
+    created_at  :datetime
+    active_status :ActiveStatus
+
+class productModelBase(BaseModel):
+    model_name :str
+    created_at  :datetime
+    active_status :ActiveStatus
+    model_sku:str
+    brand_id:int
+
+class engineBase(BaseModel):
+    engine_name :str
+    created_at  :datetime
+    active_status :ActiveStatus
+
 def get_db():
     db = SessionLocal()
     try:
@@ -226,6 +248,90 @@ async def discount_list(db:db_dependency):
     result = db.query(models.DiscountCode).all()
     if not result:
         raise HTTPException(status_code=404, detail="Active Discount is not found")
+   
+    return result
+
+
+#Product Category Filter
+
+@app.post("/category/save/")
+async def category_add(category:productcategoryBase,  db:db_dependency):
+    db_category = models.ProductCategory(
+        category_name = category.category_name,
+        created_at = category.created_at,
+        active_status = category.active_status,
+        )
+    db.add(db_category)
+    db.commit()
+    db.refresh(db_category)
+
+@app.get("/category/list/")
+async def category_list(db:db_dependency):
+    result = db.query(models.ProductCategory).all()
+    if not result:
+        raise HTTPException(status_code=404, detail="Active Category is not found")
+   
+    return result
+
+
+@app.post("/brand/save/")
+async def brand_add(brand:productBrandBase,  db:db_dependency):
+    db_brand = models.ProductBrand(
+        brand_name = brand.brand_name,
+        created_at = brand.created_at,
+        active_status = brand.active_status,
+        )
+    db.add(db_brand)
+    db.commit()
+    db.refresh(db_brand)
+
+@app.get("/brand/list/")
+async def brand_list(db:db_dependency):
+    result = db.query(models.ProductBrand).all()
+    if not result:
+        raise HTTPException(status_code=404, detail="Active Brand is not found")
+   
+    return result
+
+
+@app.post("/model/save/")
+async def model_add(model:productModelBase,  db:db_dependency):
+    db_model = models.ProductModel(
+        model_name = model.model_name,
+        created_at = model.created_at,
+        active_status = model.active_status,
+        brand_id = model.brand_id,
+        model_sku = model.model_sku,
+        )
+    db.add(db_model)
+    db.commit()
+    db.refresh(db_model)
+
+@app.get("/model/list/")
+async def model_list(db:db_dependency):
+    result = db.query(models.ProductModel).all()
+    if not result:
+        raise HTTPException(status_code=404, detail="Active Model is not found")
+   
+    return result
+
+
+@app.post("/engine/save/")
+async def engine_add(engine:engineBase,  db:db_dependency):
+    db_engine = models.Engine(
+        engine_name = engine.engine_name,
+        created_at = engine.created_at,
+        active_status = engine.active_status,
+        )
+    db.add(db_engine)
+    db.commit()
+    db.refresh(db_engine)
+
+@app.get("/engine/list/")
+async def engine_list(db:db_dependency):
+    result = db.query(models.Engine).all()
+    if not result:
+        raise HTTPException(status_code=404, detail="Active Engine is not found")
    
     return result
 

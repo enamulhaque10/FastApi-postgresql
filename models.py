@@ -49,7 +49,7 @@ class Product(Base):
     product_options = Column(String,index=True)
     image_url = Column(String, index=True)
     imageAlt = Column(String, index=True)
-    tags = Column(Enum(ProductTags), default=ProductTags.NEW)
+    tags = Column(Enum(ProductTags), default=ProductTags.NEW_ARRIVALS)
 
 class FooterCategory(Base):
     __tablename__ = 'footercategory'
@@ -70,3 +70,39 @@ class DiscountCode(Base):
     active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
     start_date =  Column(DateTime, default=datetime.now)
     end_date =  Column(DateTime, default=datetime.now)
+
+class ProductCategory(Base):
+    __tablename__ = "productcategory"
+
+    id = Column(Integer, primary_key=True,index=True)
+    category_name = Column(String, index=True)
+    created_at = Column(DateTime,default=datetime.now)
+    active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
+
+
+class ProductBrand(Base):
+    __tablename__ = "productbrand"
+
+    id = Column(Integer, primary_key=True,index=True)
+    brand_name = Column(String, index=True)
+    created_at = Column(DateTime,default=datetime.now)
+    active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
+
+class ProductModel(Base):
+    __tablename__ = "productmodel"
+
+    id = Column(Integer, primary_key=True,index=True)
+    model_name = Column(String, index=True)
+    created_at = Column(DateTime,default=datetime.now)
+    active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
+    model_sku = Column(String, index=True)
+    brand_id = Column(Integer, ForeignKey("productbrand.id"))
+
+
+class Engine(Base):
+    __tablename__ = "engine"
+
+    id = Column(Integer, primary_key=True,index=True)
+    engine_name = Column(String, index=True)
+    created_at = Column(DateTime,default=datetime.now)
+    active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
