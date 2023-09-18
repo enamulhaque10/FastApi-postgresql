@@ -54,6 +54,8 @@ class footerBase(BaseModel):
 class discountBase(BaseModel):
     name :str
     discount_code  :str
+    discount_price  :str
+    discount_rate  :str
     active_status :ActiveStatus
     start_date : datetime
     end_date : datetime
@@ -209,6 +211,8 @@ async def discountcode_add(discount:discountBase,  db:db_dependency):
     db_discount = models.DiscountCode(
         name = discount.name,
         discount_code = discount.discount_code,
+        discount_price = discount.discount_price,
+        discount_rate = discount.discount_rate,
         active_status = discount.active_status,
         start_date = discount.start_date,
         end_date = discount.end_date

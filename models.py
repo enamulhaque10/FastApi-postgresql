@@ -65,6 +65,8 @@ class DiscountCode(Base):
     id = Column(Integer, primary_key=True,index=True)
     name = Column(String, index=True)
     discount_code = Column(String, index=True)
+    discount_price = Column(String, index=True)
+    discount_rate = Column(String, index=True)
     active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
     start_date =  Column(DateTime, default=datetime.now)
     end_date =  Column(DateTime, default=datetime.now)
