@@ -315,6 +315,26 @@ async def model_list(db:db_dependency):
    
     return result
 
+@app.get("/model/find/{brandId}")
+async def model_find(brandId:int, db:db_dependency):
+    request_id = brandId
+    model_list = db.execute(text("SELECT * FROM ProductModel as m where m.brand_id=:request_id").bindparams(bindparam("request_id", request_id)))
+    model_list = model_list.fetchall()
+    result = []
+
+    for item in model_list:
+        object_data = {
+        'model_name' : item[1],
+        'created_at' : item[2],
+        'active_status' : item[3],
+        'model_sku' : item[4],
+        }
+        result.append(object_data)
+    if not result:
+        raise HTTPException(status_code=404, detail="Active Model is not found")
+   
+    return result
+
 
 @app.post("/engine/save/")
 async def engine_add(engine:engineBase,  db:db_dependency):
