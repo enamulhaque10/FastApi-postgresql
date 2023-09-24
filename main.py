@@ -324,6 +324,7 @@ async def model_find(brandId:int, db:db_dependency):
 
     for item in model_list:
         object_data = {
+        'id' : item[0],
         'model_name' : item[1],
         'created_at' : item[2],
         'active_status' : item[3],
