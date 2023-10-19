@@ -106,3 +106,11 @@ class Engine(Base):
     engine_name = Column(String, index=True)
     created_at = Column(DateTime,default=datetime.now)
     active_status = Column(Enum(ActiveStatus), default=ActiveStatus.ACTIVE)
+
+
+class Users(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True)
+    hashed_password = Column(String)
