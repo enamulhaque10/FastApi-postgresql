@@ -37,7 +37,6 @@ class addsliderBase(BaseModel):
     shop_url:str
 
 class productBase(BaseModel):
-    id: integer
     product_name :str
     image_href  :str
     product_price :str
@@ -149,7 +148,6 @@ async def read_slider(db:db_dependency):
 @app.post("/product/")
 async def create_product(product:productBase, db:db_dependency):
     db_product = models.Product(
-    id = product.id,
     product_name = product.product_name,
     image_href = product.image_href,
     product_price = product.product_price,
