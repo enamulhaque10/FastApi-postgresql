@@ -180,6 +180,7 @@ async def product_(tags:str,db:db_dependency):
 
     for item in raw_data:
         object_data = {
+        'id' : item[0],
         'product_name' : item[1],
         'image_href' : item[2],
         'product_price' : item[3],
