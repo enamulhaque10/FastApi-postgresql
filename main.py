@@ -7,11 +7,13 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import bindparam, text
 
+import auth
 import models
 from database import SessionLocal, engine
 from enums import ActiveStatus, ProductTags
 
 app = FastAPI()
+app.include_router(auth.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*']
