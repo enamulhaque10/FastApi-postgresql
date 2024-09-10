@@ -10,7 +10,7 @@ source env/bin/activate
 
 # Install FastApi, SqlAlchemy (ORM), Psycopg2-binary(connection), Uvicorn (Run Server)
 
-pip install fastapi sqlalchemy,psycopg2-binary,uvicorn
+pip install fastapi sqlalchemy psycopg2-binary uvicorn
 
 # Run Project
 
