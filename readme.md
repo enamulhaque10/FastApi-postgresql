@@ -18,7 +18,7 @@ uvicorn main:app --reload
 
 # Demo URL
 
-https://test.tools121.com/https://test.tools121.com
+https://test.tools121.com
 
 # Tutorial Link
 
